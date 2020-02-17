@@ -29,16 +29,29 @@ export default class App extends React.Component {
     const item = e.target.name;
     const isChecked = e.target.checked;
     if (item === this.props.selectAllCheckbox.label) {
+      // si on coche select all on set tous les éléments avec la valeur checked du select all
       this.state.checkboxes.forEach(element => {
-        if (element.label !== this.props.selectAllCheckbox.label) {
-          this.setState((state) => ({ checkedItems: state.checkedItems.set(element.label, isChecked) }));
-        }        
+        this.setState((state) => ({ checkedItems: state.checkedItems.set(element.label, isChecked) }));  
       });
     } else {
       if (!isChecked) {
+        // des qu'on décoche une case, on met le checked du select all à faux
         this.setState((state) => ({ checkedItems: state.checkedItems.set(this.props.selectAllCheckbox.label, isChecked) }));
+        this.setState((state) => ({ checkedItems: state.checkedItems.set(item, isChecked) }));
+      } else {
+        this.setState((state) => ({ checkedItems: state.checkedItems.set(item, isChecked) }));
+        // on compte le nombre d'élément checked qui ne sont pas le select all 
+        let counter = 1;
+        this.state.checkedItems.forEach((element, key) => {
+          if (key !== this.props.selectAllCheckbox.label && element) {
+            counter += 1;
+            // si tous les éléments sont checked alors le select all passe à l'état checked
+            if (counter === (this.state.checkboxes.length-1)) {
+              this.setState((state) => ({ checkedItems: state.checkedItems.set(this.props.selectAllCheckbox.label, true) }));
+            }
+          }
+        });
       }
-      this.setState((state) => ({ checkedItems: state.checkedItems.set(item, isChecked) }));
     }
   }
 }

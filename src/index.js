@@ -19,6 +19,12 @@ const checkboxes = [
     },
     {
         label: "Item 4"
+    },
+    {
+        label: "Item 5"
+    },
+    {
+        label: "Item 6"
     }
 ]
 const selectAllCheckbox = checkboxes[0];
